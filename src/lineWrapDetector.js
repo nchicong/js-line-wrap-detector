@@ -1,8 +1,8 @@
 (function() {
 
   var wrapWords = function(text, before, after, join) {
-    var join = join || ' ';
-    var words = text.split(' ');
+    var join = join || '';
+    var words = text.split('');
     for(var i=0;i<words.length;i++) {
       words[i] = before + words[i] + after;
     }
@@ -11,7 +11,7 @@
 
   var wrapWordsInChildElement = function(el) {
     if(el.nodeName == '#text') {
-      var words = el.textContent.split(' ');
+      var words = el.textContent.split('');
       for(var i=0;i<words.length;i++) {
         if(words[i].length > 0) {
           var span = document.createElement('span');
@@ -19,8 +19,6 @@
           span.innerText = words[i];
           el.parentNode.insertBefore(span, el);
         }
-        if(i < words.length - 1) 
-          el.parentNode.insertBefore(document.createTextNode(" "), el);
       };
       el.parentNode.removeChild(el);
     }
