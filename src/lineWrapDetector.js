@@ -1,4 +1,5 @@
 (function() {
+  var nodeNamesToExlude = ["CODE", "EM"];
 
   var wrapWords = function(text, before, after, join) {
     var join = join || '';
@@ -10,42 +11,46 @@
   };
 
   var wrapWordsInChildElement = function(el) {
-    if(el.parentElement.classList.contains("js-detect-wrap")){
+    if (el.parentElement.classList.contains("js-detect-wrap")
+        || nodeNamesToExlude.indexOf(el.parentElement.nodeName) > -1) {
       return;
     }
-    if(el.nodeName == '#text') {
-      var words = el.textContent.split(' ');
 
-      for (var i=0;i<words.length;i++) {
-        var word = words[i];
-
-        for (var j=0; j < word.length; j++) {
-          var lighter = "";
-          if (word.length > 3  && j >= word.length/2) {
-            var lighter = " lighter";
-          }
-
-          if (word[j].length > 0) {
-            var span = document.createElement('span');
-            span.className = "js-detect-wrap" + lighter;
-
-            span.innerText = word[j];
-            el.parentNode.insertBefore(span, el);
-          }
-        }
-
-        var span = document.createElement('span');
-        span.className = "js-detect-wrap"
-        span.innerText = " ";
-        el.parentNode.insertBefore(span, el);
-      };
-      el.parentNode.removeChild(el);
-    }
-    else {
+    if(el.nodeName != '#text') {
       if(el.innerText){
         el.innerHTML = wrapWords(el.innerText,'<span class="js-detect-wrap">','</span>');
       }
+      return;
     }
+
+    var words = el.textContent.split(' ');
+
+    for (var i=0;i<words.length;i++) {
+      var word = words[i];
+
+      for (var j=0; j < word.length; j++) {
+        var lighter = "";
+        if (word.length > 3  && j > word.length/2) {
+          var lighter = " lighter";
+        }
+
+        if (word[j].length <= 0) {
+          continue;
+        }
+
+        var span = document.createElement('span');
+        span.className = "js-detect-wrap" + lighter;
+
+        span.innerText = word[j];
+        el.parentNode.insertBefore(span, el);
+      }
+
+      var span = document.createElement('span');
+      span.className = "js-detect-wrap"
+      span.innerText = " ";
+      el.parentNode.insertBefore(span, el);
+    };
+    el.parentNode.removeChild(el);
   };
 
   var wrapWordsInElement = function(el) {
