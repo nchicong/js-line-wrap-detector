@@ -10,18 +10,34 @@
   };
 
   var wrapWordsInChildElement = function(el) {
-    if(el.parentElement.className=="js-detect-wrap"){
+    if(el.parentElement.classList.contains("js-detect-wrap")){
       return;
     }
     if(el.nodeName == '#text') {
-      var words = el.textContent.split('');
-      for(var i=0;i<words.length;i++) {
-        if(words[i].length > 0) {
-          var span = document.createElement('span');
-          span.className = "js-detect-wrap";
-          span.innerText = words[i];
-          el.parentNode.insertBefore(span, el);
+      var words = el.textContent.split(' ');
+
+      for (var i=0;i<words.length;i++) {
+        var word = words[i];
+
+        for (var j=0; j < word.length; j++) {
+          var lighter = "";
+          if (word.length > 3  && j >= word.length/2) {
+            var lighter = " lighter";
+          }
+
+          if (word[j].length > 0) {
+            var span = document.createElement('span');
+            span.className = "js-detect-wrap" + lighter;
+
+            span.innerText = word[j];
+            el.parentNode.insertBefore(span, el);
+          }
         }
+
+        var span = document.createElement('span');
+        span.className = "js-detect-wrap"
+        span.innerText = " ";
+        el.parentNode.insertBefore(span, el);
       };
       el.parentNode.removeChild(el);
     }
@@ -58,6 +74,7 @@
 
     var lastOffset = 0, line=[], lines = [], l=0;
     for(var i=0;i<spans.length;i++) {
+
       var offset = spans[i].offsetTop+spans[i].getBoundingClientRect().height;
       if(offset == lastOffset) {
         line.push(spans[i]);
@@ -82,7 +99,7 @@
 
   if(typeof define == 'function') {
     define(function() {
-      return detector; 
+      return detector;
     });
   }
   else {
