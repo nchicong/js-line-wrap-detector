@@ -29,9 +29,11 @@
       var word = words[i];
 
       for (var j=0; j < word.length; j++) {
-        var lighter = "";
+        var customClass = "";
         if (word.length > 3  && j > word.length/2) {
-          var lighter = " lighter";
+          customClass = " lighter";
+        } else {
+          customClass = " darker";
         }
 
         if (word[j].length <= 0) {
@@ -39,7 +41,7 @@
         }
 
         var span = document.createElement('span');
-        span.className = "js-detect-wrap" + lighter;
+        span.className = "js-detect-wrap" + customClass;
 
         span.innerText = word[j];
         el.parentNode.insertBefore(span, el);
