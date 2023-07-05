@@ -23,7 +23,7 @@
       return;
     }
 
-    var words = el.textContent.split(' ');
+    var words = el.textContent.replace(/\n/g, " ").split(' ');
 
     for (var i=0;i<words.length;i++) {
       var word = words[i];
